@@ -1,12 +1,18 @@
 services:
-  verdaccio:
+  wfh-verdaccio:
     image: verdaccio/verdaccio:nightly-master
-    container_name: verdaccio-docker-local-storage-vol
+    container_name: wfh-verdaccio
     ports:
       - '4873:4873'
     volumes:
       - './storage:/verdaccio/storage'
       - './conf:/verdaccio/conf'
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --no-verbose --tries=1 http://127.0.0.1:4873/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
 volumes:
   verdaccio:
     driver: local
